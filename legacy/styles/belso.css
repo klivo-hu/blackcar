@@ -1,0 +1,189 @@
+/* ALAP FORMAZAS*/
+@import url('https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@300&display=swap');
+
+* {
+    font-family: 'Josefin Sans', sans-serif;
+}
+:root {
+    --clr-light:#0c0c0c;
+    --clr-dark:#ffffff;
+}
+
+a:-webkit-any-link {
+    color: var(--clr-dark);
+    cursor: pointer;
+    text-decoration: none;
+}
+
+.btn {
+    color:#ffffff;
+    margin-top: 1em;
+    font-size: large;
+    font-weight: 600;
+    padding:0.5em;
+    border: 1px solid var(--clr-dark);
+    background-color: var(--clr-light);
+    border-radius: 10px;
+    transition: all 0.5s;
+    box-shadow: 0 3px 8px rgba(116,116,116,0.5), 0 3px 3px rgba(116,116,116,0.5), 0 0 100px -10px var(--clr-light);
+}
+
+.btn:hover{
+    scale: 1.1;
+}
+.header{
+    z-index:100;
+    position: sticky;
+    top: 10px;
+    background-color: var(--clr-light);
+    border-bottom: 1px solid var(--clr-dark);
+    
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+}
+
+body{
+    background-color: var(--clr-light);
+    color:var(--clr-dark);
+}
+
+.gombok ul li {
+    list-style-type: none;
+    
+}
+.gombok ul {
+    display:flex;
+    justify-content: space-between;
+    gap:1.5em;
+}
+
+.gombok{
+    margin-right: 100px;
+}
+
+.gombok li:hover {
+    transform: translateY(-5px);
+    transition: 0.5s;
+    border-bottom: 1px solid var(--clr-dark);
+}
+
+.logo {
+    display: flex;
+    justify-content: space-between;
+    gap:1em;
+    margin-left: 50px;
+}
+
+.logo svg {
+    position: relative;
+    top:1em;
+}
+
+.footer{
+    border-top: 1px solid var(--clr-dark);
+    display:flex;
+    flex-direction: row;
+    gap:2em;
+    margin-top:200px;
+    padding-top:50px;
+
+}
+
+.elerhetoseg ul li{
+    list-style-type: none;
+}
+
+.elerhetoseg ul {
+    display : flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.elerhetoseg ul li p {
+    margin-block-start: 0px;
+    margin-block-end: 0px;
+}
+
+.navigation ul li {
+    list-style-type: none;
+}
+
+.navigation ul{
+    display:flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.also {
+    border-top: 1px solid var(--clr-dark);
+    margin: 5px;
+    padding:0px;
+    text-align: center;
+    font-size: smaller; 
+}
+
+.kapcsolat-ikon {
+    padding:4px;
+    border: 1px solid var(--clr-dark);
+    border-radius: 5px;
+}
+.logokep {
+    height: 24px;
+    width: auto;
+    display: block;
+    margin-block-start: 1em;
+    margin-block-end: 1em;
+    margin-inline-start: 0px;
+    margin-inline-end: 0px;
+    unicode-bidi: isolate;
+}
+
+
+/* TARTALOM */
+.cim {
+    text-align: center;
+}
+
+.oldal {
+    background-image: url("../images/belso.png");
+    height: 800px;
+    background-repeat: no-repeat;
+    background-size: cover;
+    padding-top: 40px;
+}
+
+.footer {
+    margin-top: 0px;
+}
+
+.tartalom {
+    background-color: var(--clr-light);
+    border-radius: 50px;
+    height: 500px;
+    width: 600px;
+    margin: auto;
+    padding-top: 20px;
+
+}
+
+.foglalas-gomb {
+    text-align: center;
+    align-items: center;
+    padding-bottom: 20px;
+    height: auto;
+    width: auto;
+}
+
+.szoveg {
+    text-align: center;
+    list-style-position: inside;
+}
+
+.szoveg ul { 
+    display: inline-block;
+    text-align: left;
+    margin:0px;
+}

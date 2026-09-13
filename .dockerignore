@@ -1,0 +1,20 @@
+.git
+.github
+.next
+node_modules
+coverage
+.env
+.env.*
+!.env.example
+data
+# A helyi futtatás felülírása — az image-ben nincs rá szükség.
+docker-compose.local.yml
+# A régi, kézzel írt oldal. Csak hivatkozási alap; a build nem használja,
+# a 60 MB nyers fotó viszont minden image-réteget meghizlalna.
+legacy
+*.log
+.DS_Store
+Thumbs.db
+.vscode
+.idea
+.claude

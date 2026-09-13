@@ -1,0 +1,244 @@
+/* ALAP FORMAZAS*/
+@import url('https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@300&display=swap');
+
+* {
+    font-family: 'Josefin Sans', sans-serif;
+}
+:root {
+    --clr-light:#0c0c0c;
+    --clr-dark:#ffffff;
+}
+
+a:-webkit-any-link {
+    color: var(--clr-dark);
+    cursor: pointer;
+    text-decoration: none;
+}
+
+.btn {
+    color:#ffffff;
+    margin-top: 1em;
+    font-size: large;
+    font-weight: 600;
+    padding:0.5em;
+    border: 1px solid var(--clr-dark);
+    background-color: var(--clr-light);
+    border-radius: 10px;
+    box-shadow: 0 10px 20px rgba(116,116,116,0.5), 0 6px 6px rgba(116,116,116,0.5), 0 0 100px -10px var(--clr-light);
+}
+
+.header{
+    z-index:100;
+    position: sticky;
+    top: 10px;
+    background-color: var(--clr-light);
+    border-bottom: 1px solid var(--clr-dark);
+    
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+}
+
+body{
+    background-color: var(--clr-light);
+    color:var(--clr-dark);
+}
+
+.gombok ul li {
+    list-style-type: none;
+    
+}
+.gombok ul {
+    display:flex;
+    justify-content: space-between;
+    gap:1.5em;
+}
+
+.gombok{
+    margin-right: 100px;
+}
+
+.gombok li:hover {
+    transform: translateY(-5px);
+    transition: 0.5s;
+    border-bottom: 1px solid var(--clr-dark);
+}
+
+.logo {
+    display: flex;
+    justify-content: space-between;
+    gap:1em;
+    margin-left: 50px;
+}
+
+.logo svg {
+    position: relative;
+    top:1em;
+}
+
+.footer{
+    border-top: 1px solid var(--clr-dark);
+    display:flex;
+    flex-direction: row;
+    gap:2em;
+    margin-top:0px;
+    padding-top:50px;
+
+}
+
+.elerhetoseg ul li{
+    list-style-type: none;
+}
+
+.elerhetoseg ul {
+    display : flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.elerhetoseg ul li p {
+    margin-block-start: 0px;
+    margin-block-end: 0px;
+}
+
+.navigation ul li {
+    list-style-type: none;
+}
+
+.navigation ul{
+    display:flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.also {
+    border-top: 1px solid var(--clr-dark);
+    margin: 5px;
+    padding:0px;
+    text-align: center;
+    font-size: smaller; 
+}
+
+.kapcsolat-ikon {
+    padding:4px;
+    border: 1px solid var(--clr-dark);
+    border-radius: 5px;
+}
+
+.logokep {
+    height: 24px;
+    width: auto;
+    display: block;
+    margin-block-start: 1em;
+    margin-block-end: 1em;
+    margin-inline-start: 0px;
+    margin-inline-end: 0px;
+    unicode-bidi: isolate;
+}
+
+/*TARTALOM*/
+
+.cim {
+    text-align: center;
+}
+
+
+.tabla {
+    background-color: var(--clr-light);
+    border: 3px solid rgb(27, 27, 27);
+    margin: auto;
+    width: 500px;
+    border-radius: 20px;
+    text-align: center;
+    padding: 30px;
+}
+
+form {
+    margin:auto;
+    width: 450px;
+}
+
+.input-field {
+    min-height: 35px;
+    padding-inline: 25px;
+    width: 200px;
+    border: 1px solid rgb(27, 27, 27);
+    color: white;
+    background-color: var(--clr-light);
+    padding: 2px 4px 2px 4px;
+    margin:3px;
+    border-radius: 10px;
+}
+
+.input-field:focus {
+    background-color: rgb(27, 27, 27);   
+    border:1px solid rgb(20, 20, 20);
+}
+
+select.input-field, .input-field::placeholder {
+    color: white;
+}
+
+.input-wrapper {
+    position: relative;
+    width: 450px;
+    margin-bottom: 10px;
+}
+
+.form-btn {
+    color:#ffffff;
+    margin-top: 1em;
+    font-size: large;
+    font-weight: 600;
+    padding:0.5em;
+    border: 1px solid rgb(27, 27, 27);
+    background-color: var(--clr-light);
+    border-radius: 10px;
+    transition: all 0.5s;
+}
+.form-btn:hover{
+    scale:1.1;
+}
+textarea {
+    min-height: 50px;
+    height: 50px;
+    max-height: 100px;
+    width: 300px;
+    resize: vertical;
+    border: 1px solid rgb(27, 27, 27);
+    color: white;
+    background-color: var(--clr-light);
+    padding: 2px 4px 2px 4px;
+    border-radius: 10px;
+    padding:5px;
+}
+
+textarea::placeholder{
+    padding:5px;
+    color: white;
+}
+
+textarea:focus {
+    background-color: rgb(27, 27, 27);   
+    border:1px solid rgb(20, 20, 20);
+}
+
+.input-field > option {
+    color:white;
+    background-color: var(--clr-light);
+}
+
+.tarolo {
+    width: auto;
+    height: auto;
+    padding-bottom: 200px;
+    background-image: url('../images/bemutatkozas.png');
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+#date::-webkit-calendar-picker-indicator {
+    filter: invert(1);
+}

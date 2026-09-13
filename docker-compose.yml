@@ -1,0 +1,65 @@
+# Black Car Autókozmetika — egy konténer, 3000-es port.
+#
+# A tárhelyszolgáltatás a 3000-es portra irányít, ezért a konténer is azon figyel.
+services:
+  blackcar_web:
+    build:
+      context: .
+      args:
+        # Build időben ég bele a kliens bundle-be. Meg kell egyeznie az éles
+        # domainnel, különben minden canonical URL, OG tag és sitemap bejegyzés
+        # máshová mutat.
+        NEXT_PUBLIC_SITE_URL: https://blackcar60.hu
+
+    # A Traefik a hosting_{ugyfel}_web névre routol — a névnek egyeznie kell,
+    # különben a proxy nem találja meg a konténert (502).
+    container_name: hosting_blackcar_web
+    restart: unless-stopped
+
+    # Innen jön futásidőben az ADMIN_JWT_SECRET, az ADMIN_USERNAME, az
+    # ADMIN_PASSWORD_HASH és a cégadatok. Lásd .env.example.
+    env_file:
+      - .env
+
+    # Nincs közvetlen host port: a forgalom a Traefiken keresztül jön, az
+    # intézi a HTTPS-t is. A panelben a container_port legyen 3000.
+    expose:
+      - '3000'
+
+    # A Traefik ezen a hálózaton éri el a konténert. A hálózatot a platform
+    # hozza létre a deploy előtt, ezért external.
+    networks:
+      - client_blackcar_net
+
+    volumes:
+      # A beállítások és a beérkezett foglalások. Enélkül az oldal minden
+      # deploynál visszaáll a kikapcsolt foglalásra és az alapértelmezett
+      # elérhetőségre, a beérkezett megkeresések pedig elvesznek.
+      - blackcar_data:/app/data
+
+    logging:
+      driver: json-file
+      options:
+        max-size: '10m'
+        max-file: '3'
+
+    # Konténer szintű szigorítás.
+    #
+    # A `read_only: true` szándékosan NINCS beállítva. A Next.js ISR frissített
+    # HTML-t ír a /app/.next/server/app alá, és egy csak olvasható gyökérrel
+    # minden revalidáció EROFS hibával bukna — naplózva, de nem végzetesen,
+    # vagyis a tünet néma: az oldal a build idejű pillanatképet szolgálná ki.
+    #
+    # A `security_opt: no-new-privileges:true` szándékosan NINCS itt: a
+    # tárhelyplatform compose-ellenőrzése minden `security_opt` kulcsot
+    # elutasít (érték nélkül, kulcs alapján), így a deploy elbukna rajta.
+    # A folyamat továbbra is jogosulatlan felhasználóként fut (lásd Dockerfile).
+    tmpfs:
+      - /tmp
+
+volumes:
+  blackcar_data:
+
+networks:
+  client_blackcar_net:
+    external: true

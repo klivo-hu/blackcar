@@ -1,0 +1,448 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ==========================================================================
+   Black Car Autókozmetika — design tokenek
+   --------------------------------------------------------------------------
+   A paletta a márkanév: fekete. Három felület — obszidián, grafit, csont —
+   és egyetlen akcentus, a sárgaréz. Nincs második akcentus és nincs
+   színátmenet: a mélységet tónuslépcső, árnyék és él adja, nem színkeverés.
+
+   A sárgaréz két tónusban él. A `brass` a sötét felületeké; világos felületen
+   ugyanaz a szín 2,1:1 lenne, ezért ott a `brass-deep` áll helyette. A párokat
+   a `npm run contrast` méri.
+   ========================================================================== */
+
+@layer base {
+  :root {
+    /* A három szekciófelület. */
+    --obsidian: 10 10 11; /* #0A0A0B — a legmélyebb felület */
+    --graphite: 20 20 23; /* #141417 */
+    --bone: 242 240 236; /* #F2F0EC — meleg törtfehér, nem tiszta fehér */
+
+    /* Kiemelt felületek: kártya sötéten, illetve világoson. */
+    --slate: 28 28 33; /* #1C1C21 */
+    --paper: 255 255 255;
+
+    /* Szöveg. */
+    --ink: 18 18 20; /* #121214 */
+    --ink-soft: 58 58 63; /* #3A3A3F */
+    --muted: 94 92 87; /* #5E5C57 — 5,9:1 csonton */
+    --on-dark: 242 240 236; /* #F2F0EC */
+    --on-dark-muted: 168 165 157; /* #A8A59D — 7,5:1 grafiton */
+
+    /* Az egyetlen akcentus. */
+    --brass: 200 162 83; /* #C8A253 — sötét felületen */
+    --brass-deep: 122 91 30; /* #7A5B1E — világos felületen */
+
+    /* Keret. */
+    --steel: 46 46 54; /* #2E2E36 — sötét felületen */
+    --line: 224 220 212; /* #E0DCD4 — világos felületen */
+    --line-strong: 201 195 184; /* #C9C3B8 */
+
+    /* Állapotjelzés. Csak visszajelzésre, soha díszítésre. */
+    --success: 27 122 75; /* #1B7A4B */
+    --danger: 168 48 39; /* #A83027 */
+
+    /* Árnyék alapszíne. Tiszta fekete: a paletta semleges, egy színezett
+       árnyék idegen tónust vinne a szürkékbe. */
+    --shadow: 0 0 0;
+
+    /**
+     * Mozgásgörbék.
+     *
+     * A beépített CSS easing-ek túl gyengék ahhoz, hogy a mozgás szándékosnak
+     * hasson. Az oldalon csak ez a kettő használható.
+     */
+    --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+    --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+
+    /**
+     * CEF token-interfész.
+     *
+     * A keretrendszer eszközei (`cef design`, `cef review`) a `--cef-color-*`,
+     * `--cef-space-*` és `--cef-text-*` neveken keresik a design rendszer
+     * tokenjeit. A fenti, szemantikus nevek maradnak a forrás; ez csak
+     * leképezés, hogy a projekt kívülről is olvasható legyen a keretrendszer
+     * szerződése szerint.
+     */
+    --cef-primary: var(--brass);
+    --cef-color-primary: var(--brass);
+    --cef-color-surface: var(--obsidian);
+    --cef-color-raised: var(--slate);
+    --cef-color-recessed: var(--graphite);
+    --cef-color-foreground: var(--on-dark);
+    --cef-color-muted: var(--on-dark-muted);
+    --cef-color-border: var(--steel);
+    --cef-color-inverse: var(--ink);
+    --cef-color-success: var(--success);
+    --cef-color-warning: var(--brass-deep);
+    --cef-color-danger: var(--danger);
+
+    --cef-space-1: 0.25rem;
+    --cef-space-2: 0.5rem;
+    --cef-space-3: 0.75rem;
+    --cef-space-4: 1rem;
+    --cef-space-6: 1.5rem;
+    --cef-space-8: 2rem;
+    --cef-space-12: 3rem;
+    --cef-space-16: 4rem;
+    --cef-space-24: 6rem;
+    --cef-space-30: 7.5rem;
+
+    --cef-text-body-sm: 0.875rem;
+    --cef-text-body: 1.0625rem;
+    --cef-text-body-lg: 1.1875rem;
+    --cef-text-h4: 1.625rem;
+    --cef-text-h3: clamp(1.625rem, 3.4vw, 2.125rem);
+    --cef-text-h2: clamp(2rem, 5vw, 3.25rem);
+    --cef-text-h1: clamp(2.5rem, 6.4vw, 4.25rem);
+    --cef-text-display: clamp(3rem, 9.5vw, 6.5rem);
+  }
+
+  * {
+    border-color: rgb(var(--steel));
+  }
+
+  html {
+    /* A szekcióelválasztók szélesebbek a nézetnél; vízszintesen vágjuk őket,
+       de a függőleges `position: sticky` működőképes marad. */
+    overflow-x: clip;
+    scroll-behavior: smooth;
+    -webkit-text-size-adjust: 100%;
+    /* A rögzített fejléc alá horgonyzott szekciók nem csúszhatnak alá. */
+    scroll-padding-top: 6rem;
+  }
+
+  body {
+    background-color: rgb(var(--obsidian));
+    color: rgb(var(--on-dark));
+    font-family: var(--font-sans), system-ui, sans-serif;
+    font-size: 1.0625rem;
+    line-height: 1.7;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    font-family: var(--font-display), Haettenschweiler, Impact, sans-serif;
+    font-weight: 600;
+    /* A hosszú magyar összetett szavak a nagy fokozatokon nem férnek el
+       törés nélkül. Csak a három legnagyobb szinten engedjük: kártyacímen a
+       kötőjeles törés csúnya. */
+    text-wrap: balance;
+  }
+
+  h1,
+  h2,
+  h3 {
+    hyphens: auto;
+  }
+
+  /* A billentyűzetes fókusz mindig látszik, és mindkét felületen. A
+     `:focus-visible` csak akkor rajzol, ha a böngésző szerint a felhasználó
+     tényleg billentyűvel navigál — egérkattintásra nem villan fel. */
+  :focus-visible {
+    outline: 2px solid rgb(var(--brass));
+    outline-offset: 3px;
+    border-radius: 2px;
+  }
+
+  [data-surface='bone'] :focus-visible {
+    outline-color: rgb(var(--brass-deep));
+  }
+
+  ::selection {
+    background-color: rgb(var(--brass) / 0.3);
+    color: rgb(var(--on-dark));
+  }
+
+  [data-surface='bone'] ::selection {
+    background-color: rgb(var(--brass) / 0.35);
+    color: rgb(var(--ink));
+  }
+}
+
+/* ==========================================================================
+   Komponensréteg
+   ========================================================================== */
+
+@layer components {
+  /**
+   * A kihagyó hivatkozás.
+   *
+   * Billentyűzettel az első Tab ezt hozza elő. Nem `display: none` rejti —
+   * azt a képernyőolvasó és a fókuszsorrend is kihagyná —, hanem a nézeten
+   * kívülre van tolva.
+   */
+  .skip-link {
+    position: absolute;
+    top: 0.75rem;
+    left: 0.75rem;
+    z-index: 100;
+    transform: translateY(-200%);
+    border-radius: 9999px;
+    background-color: rgb(var(--brass));
+    padding: 0.625rem 1.25rem;
+    font-weight: 600;
+    color: rgb(var(--obsidian));
+    transition: transform 220ms var(--ease-out);
+  }
+
+  .skip-link:focus-visible {
+    transform: translateY(0);
+  }
+}
+
+/* ==========================================================================
+   Mozgás
+   --------------------------------------------------------------------------
+   Két szabály köti az egész oldalt:
+
+   1. Csak `transform` és `opacity` animálódik. Ezeket a compositor kezeli,
+      tehát nem indítanak elrendezés-újraszámolást. A kivételek (lenyíló
+      magassága, körvonal) külön meg vannak indokolva ott, ahol állnak.
+   2. Minden mozgás alapállapota a *látható* tartalom. A megjelenést a
+      `data-motion="ready"` jelző kapcsolja be, amit a `MotionBoot` tesz ki az
+      első festés előtt. Kikapcsolt JavaScript vagy hibás betöltés esetén így
+      nem tűnhet el a szöveg.
+   ========================================================================== */
+
+/* Görgetésre megjelenő tartalom. */
+[data-motion='ready'] [data-reveal] {
+  opacity: 0;
+  transform: translate3d(0, 1.25rem, 0);
+  transition:
+    opacity 620ms var(--ease-out),
+    transform 620ms var(--ease-out);
+  transition-delay: var(--reveal-delay, 0ms);
+  will-change: transform, opacity;
+}
+
+[data-motion='ready'] [data-reveal='figure'] {
+  transform: translate3d(0, 2.5rem, 0) scale(0.97);
+}
+
+[data-motion='ready'] [data-reveal='left'] {
+  transform: translate3d(-1.75rem, 0, 0);
+}
+
+[data-motion='ready'] [data-reveal='right'] {
+  transform: translate3d(1.75rem, 0, 0);
+}
+
+[data-motion='ready'] [data-reveal][data-revealed] {
+  opacity: 1;
+  transform: translate3d(0, 0, 0) scale(1);
+  /* A mozgás végén elengedjük a compositor-réteget: húsz megjelent kártya
+     különben egész munkamenetre életben tartana húsz réteget. */
+  will-change: auto;
+}
+
+/* ==========================================================================
+   Nyitó függöny
+   --------------------------------------------------------------------------
+   Összesen 2,6 másodperc, és ebből az utolsó 0,7 a felhúzás. Alapból rejtett:
+   ha a `MotionBoot` bármi miatt nem fut le, nem marad fekete lap a tartalom
+   fölött. Csak a főoldal teljes betöltésekor indul.
+   ========================================================================== */
+
+.intro {
+  position: fixed;
+  inset: 0;
+  z-index: 90;
+  display: none;
+  /* Saját vágás: a `<html>` `overflow-x: clip`-je a rögzített elemeket nem
+     vágja, és a függöny fénycsíkja kilógna a lapból. */
+  overflow: hidden;
+  background-color: rgb(var(--obsidian));
+  pointer-events: none;
+}
+
+[data-intro='run'] .intro {
+  display: block;
+  animation: intro-lift 700ms var(--ease-in-out) 1900ms forwards;
+}
+
+/* A műtermi fénycsík: egyetlen ferde pászma, ami egyszer végigsöpör a
+   képernyőn — ugyanaz a mozdulat, amivel a lakkot ellenőrzik a fény alatt. */
+.intro__sweep {
+  position: absolute;
+  top: -30%;
+  left: -40%;
+  height: 160%;
+  width: 45%;
+  transform: rotate(14deg) translate3d(0, 0, 0);
+  background: linear-gradient(
+    90deg,
+    rgb(var(--brass) / 0) 0%,
+    rgb(var(--brass) / 0.12) 45%,
+    rgb(var(--on-dark) / 0.16) 50%,
+    rgb(var(--brass) / 0.12) 55%,
+    rgb(var(--brass) / 0) 100%
+  );
+  animation: intro-sweep 1750ms var(--ease-in-out) 180ms both;
+}
+
+.intro__mark {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1.25rem;
+  padding: 1.5rem;
+  color: rgb(var(--on-dark));
+}
+
+.intro__mark > * {
+  animation: intro-mark 900ms var(--ease-out) both;
+}
+
+/* A felirat egy hajszálnyit később érkezik, mint a jel: a szem így a
+   sziluettről olvas tovább a névre, nem egyszerre kapja a kettőt. */
+.intro__mark > :last-child {
+  animation-delay: 220ms;
+}
+
+/* A sárgaréz vonal a jel alatt: egyetlen pontos húzás, mint egy fényezési
+   nyom. A `transform` skáláz, tehát nem elrendezést animál. */
+.intro__rule {
+  height: 2px;
+  width: min(18rem, 60vw);
+  transform-origin: left center;
+  background-color: rgb(var(--brass));
+  animation: intro-rule 820ms var(--ease-out) 420ms both;
+}
+
+@keyframes intro-sweep {
+  from {
+    transform: rotate(14deg) translate3d(0, 0, 0);
+  }
+  to {
+    transform: rotate(14deg) translate3d(260%, 0, 0);
+  }
+}
+
+@keyframes intro-mark {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 1.5rem, 0);
+  }
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+@keyframes intro-rule {
+  from {
+    transform: scaleX(0);
+  }
+  to {
+    transform: scaleX(1);
+  }
+}
+
+@keyframes intro-lift {
+  from {
+    transform: translate3d(0, 0, 0);
+  }
+  to {
+    transform: translate3d(0, -100%, 0);
+  }
+}
+
+/* A tartalom a függöny alól érkezik: enélkül a felhúzás egy kész, mozdulatlan
+   lapot leplezne le, és a két mozgás nem kapcsolódna össze. */
+[data-intro='run'] .intro-stage {
+  animation: intro-stage 900ms var(--ease-out) 1900ms both;
+}
+
+@keyframes intro-stage {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 2rem, 0);
+  }
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+/* ==========================================================================
+   Csökkentett mozgás
+   --------------------------------------------------------------------------
+   Nem „lassabb animáció", hanem *nincs* animáció: a `MotionBoot` ilyenkor ki
+   sem teszi a jelzőket, ez a blokk pedig a maradékot is elnémítja — beleértve
+   a `scroll-behavior: smooth`-t, ami szintén mozgás.
+   ========================================================================== */
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  .intro {
+    display: none !important;
+  }
+}
+
+/* ==========================================================================
+   Lenyíló (GYIK)
+   --------------------------------------------------------------------------
+   A natív `<details>` a nyitást azonnal végzi: a tartalom `display: none`-ról
+   vált, amin nincs mit animálni. A `::details-content` és a hozzá tartozó két
+   szabály ezt oldja fel:
+
+   - `interpolate-size: allow-keywords` — enélkül a `height: auto` nem
+     interpolálható, tehát nincs mihez animálni.
+   - `transition-behavior: allow-discrete` — enélkül a `content-visibility`
+     váltása a mozgás *elején* történne meg, és a tartalom kivillanna.
+
+   Ahol a böngésző ezt nem ismeri, a lenyíló egyszerűen azonnal nyílik. Ez a
+   megfelelő kudarc: a tartalom mindig elérhető, csak a simítás marad el.
+   ========================================================================== */
+
+@supports (interpolate-size: allow-keywords) {
+  :root {
+    interpolate-size: allow-keywords;
+  }
+
+  .faq::details-content {
+    height: 0;
+    overflow: hidden;
+    opacity: 0;
+    transition:
+      height 320ms var(--ease-out),
+      content-visibility 320ms var(--ease-out) allow-discrete,
+      opacity 220ms var(--ease-out);
+  }
+
+  .faq[open]::details-content {
+    height: auto;
+    opacity: 1;
+  }
+}
+
+/* A böngésző alapértelmezett háromszöge. A `list-style` a szabványos út, a
+   `::-webkit-details-marker` pedig a régebbi WebKité — mindkettő kell. */
+.faq > summary::-webkit-details-marker {
+  display: none;
+}

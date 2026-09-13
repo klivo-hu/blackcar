@@ -1,0 +1,7 @@
+.next
+node_modules
+legacy
+data
+public
+package-lock.json
+*.md

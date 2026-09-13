@@ -1,0 +1,21 @@
+node_modules
+.next
+out
+build
+coverage
+data
+.env
+.env.local
+*.log
+.DS_Store
+Thumbs.db
+.vscode
+.idea
+next-env.d.ts
+tsconfig.tsbuildinfo
+.cef/reports
+
+# A legacy/ NINCS kizárva, és ez tudatos: a legacy/images/munkaim/ a
+# vállalkozás valódi munkafotóinak EGYETLEN teljes felbontású példánya, és a
+# npm run images ebből dolgozik. Ez viszont ~60 MB — ha a tárolóban ez sok,
+# a mappát előbb mentsd le máshová, és csak utána vedd fel ide.

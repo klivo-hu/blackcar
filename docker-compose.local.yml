@@ -1,0 +1,26 @@
+# Helyi próba — Traefik és külső hálózat nélkül.
+#
+#   docker compose -f docker-compose.local.yml up --build
+#
+# Az oldal a http://localhost:3000 címen lesz elérhető. A `NEXT_PUBLIC_SITE_URL`
+# itt szándékosan localhost: így a canonical URL-ek és a sitemap a próbán is
+# önmagukra mutatnak, nem az éles domainre.
+services:
+  blackcar_web:
+    build:
+      context: .
+      args:
+        NEXT_PUBLIC_SITE_URL: http://localhost:3000
+    container_name: blackcar_web_local
+    restart: unless-stopped
+    env_file:
+      - .env
+    environment:
+      NEXT_PUBLIC_SITE_URL: http://localhost:3000
+    ports:
+      - '3000:3000'
+    volumes:
+      - blackcar_data_local:/app/data
+
+volumes:
+  blackcar_data_local:
