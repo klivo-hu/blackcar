@@ -2,16 +2,22 @@
 #
 #   docker compose -f docker-compose.local.yml up --build
 #
-# Az oldal a http://localhost:3000 címen lesz elérhető. A `NEXT_PUBLIC_SITE_URL`
-# itt szándékosan localhost: így a canonical URL-ek és a sitemap a próbán is
-# önmagukra mutatnak, nem az éles domainre.
+# Az oldal a http://localhost:3000 címen lesz elérhető.
+#
+# **Ez a fájl nem megy ki a platformra** (a `.dockerignore` kizárja), tehát a
+# `docker-compose.yml` szigorú névkonvenciója itt nem kötelező. A nevek mégis
+# követik — egy `_local` utótaggal —, mert így egyszerre futhat a helyi próba és
+# egy másik példány anélkül, hogy a konténer- vagy kötetnevek ütköznének.
+#
+# A `NEXT_PUBLIC_SITE_URL` itt szándékosan localhost: így a canonical URL-ek és
+# a sitemap a próbán is önmagukra mutatnak, nem az éles domainre.
 services:
-  blackcar_web:
+  blackcar60_web_local:
     build:
       context: .
       args:
         NEXT_PUBLIC_SITE_URL: http://localhost:3000
-    container_name: blackcar_web_local
+    container_name: blackcar60_web_local
     restart: unless-stopped
     env_file:
       - .env
@@ -20,7 +26,7 @@ services:
     ports:
       - '3000:3000'
     volumes:
-      - blackcar_data_local:/app/data
+      - blackcar60_data_local:/app/data
 
 volumes:
-  blackcar_data_local:
+  blackcar60_data_local:

@@ -64,7 +64,7 @@ COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
 COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
 # A kulcs- és jelszógeneráló bent marad: a szerkesztő jelszavát a konténerben
 # is elő kell tudni állítani.
-#   docker compose exec hosting_blackcar_web node scripts/gen-password.mjs "uj jelszo"
+#   docker compose exec hosting_blackcar60_web node scripts/gen-password.mjs "uj jelszo"
 COPY --from=builder --chown=nextjs:nodejs /app/scripts ./scripts
 
 # Az adatkönyvtár üresen indul, és **ez a helyes kiinduló állapot**: a

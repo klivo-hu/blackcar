@@ -1,8 +1,44 @@
 # Black Car Autókozmetika — egy konténer, 3000-es port.
 #
-# A tárhelyszolgáltatás a 3000-es portra irányít, ezért a konténer is azon figyel.
+# ============================================================================
+# A NEVEK NEM SZABADON VÁLASZTHATÓK
+# ============================================================================
+#
+# A tárhelyplatform biztonsági ellenőrzése minden nevet az **ügyfél
+# azonosítójából** (client slug) számol, és ami nem egyezik, azt nem
+# elutasítja hibaüzenettel, hanem a deployt állítja le. Az ügyfél azonosítója
+# a platform könyvtárszerkezetéből olvasható ki:
+#
+#     /app/clients/{ügyfél}/sites/{oldal}/docker-compose.yml
+#     /app/clients/blackcar60/sites/blackcar60/docker-compose.yml
+#                    ^^^^^^^^^^
+#
+# Ebből a három név, a platform forrása szerint:
+#
+#   hálózat         client_{ügyfél}_net          → client_blackcar60_net
+#                   (api/src/services/docker.ts — clientNetworkName)
+#
+#   konténernév     hosting_{ügyfél}_web         → hosting_blackcar60_web
+#                   ha az ügyfél és az oldal azonosítója megegyezik;
+#                   különben hosting_{ügyfél}_{oldal}_web
+#                   (api/src/types.ts — containerNameForSite)
+#
+#   szolgáltatásnév megegyezik a konténernévvel
+#                   (api/src/services/template.ts — a platform saját sablonja)
+#
+# **Miért „blackcar60" és nem „blackcar".** Az azonosító a domainből jön
+# (blackcar60.hu). Egy korábbi változat „blackcar"-t írt, és a deploy
+# elbukott: a hálózat nem szerepelt az engedélyezettek között. A konténernév
+# ugyanígy hibás volt — az viszont csak később derült volna ki, 502-vel: a
+# Traefik a `hosting_blackcar60_web` névre irányít, és nem talált volna ott
+# semmit.
+#
+# Ha az oldal valaha másik ügyfélhez vagy másik azonosítóra kerül, **mind a
+# három nevet** át kell írni, különben az egyik némán elromlik.
+# ============================================================================
+
 services:
-  blackcar_web:
+  hosting_blackcar60_web:
     build:
       context: .
       args:
@@ -11,31 +47,35 @@ services:
         # máshová mutat.
         NEXT_PUBLIC_SITE_URL: https://blackcar60.hu
 
-    # A Traefik a hosting_{ugyfel}_web névre routol — a névnek egyeznie kell,
-    # különben a proxy nem találja meg a konténert (502).
-    container_name: hosting_blackcar_web
+    container_name: hosting_blackcar60_web
     restart: unless-stopped
 
     # Innen jön futásidőben az ADMIN_JWT_SECRET, az ADMIN_USERNAME, az
-    # ADMIN_PASSWORD_HASH és a cégadatok. Lásd .env.example.
+    # ADMIN_PASSWORD_HASH és a cégadatok. A fájlt a panel kezeli; a
+    # `.env.example` írja le, mit kell kitölteni.
     env_file:
       - .env
 
     # Nincs közvetlen host port: a forgalom a Traefiken keresztül jön, az
-    # intézi a HTTPS-t is. A panelben a container_port legyen 3000.
+    # intézi a HTTPS-t is.
+    #
+    # **A panelben a container_port legyen 3000.** Az alapértelmezés 80, és a
+    # Traefik abból építi a cél URL-t — rossz értéken a konténer fut, a
+    # routing él, a látogató mégis 502-t kap.
     expose:
       - '3000'
 
-    # A Traefik ezen a hálózaton éri el a konténert. A hálózatot a platform
-    # hozza létre a deploy előtt, ezért external.
+    # A hálózatot a platform hozza létre a deploy előtt, ezért external.
+    # Ezen éri el a Traefik a konténert; az ügyfél konténerei így nem látják
+    # sem a platform API-ját, sem a többi ügyfelet.
     networks:
-      - client_blackcar_net
+      - client_blackcar60_net
 
     volumes:
       # A beállítások és a beérkezett foglalások. Enélkül az oldal minden
       # deploynál visszaáll a kikapcsolt foglalásra és az alapértelmezett
       # elérhetőségre, a beérkezett megkeresések pedig elvesznek.
-      - blackcar_data:/app/data
+      - blackcar60_data:/app/data
 
     logging:
       driver: json-file
@@ -51,15 +91,16 @@ services:
     # vagyis a tünet néma: az oldal a build idejű pillanatképet szolgálná ki.
     #
     # A `security_opt: no-new-privileges:true` szándékosan NINCS itt: a
-    # tárhelyplatform compose-ellenőrzése minden `security_opt` kulcsot
-    # elutasít (érték nélkül, kulcs alapján), így a deploy elbukna rajta.
-    # A folyamat továbbra is jogosulatlan felhasználóként fut (lásd Dockerfile).
+    # platform compose-ellenőrzése **minden** `security_opt` kulcsot elutasít,
+    # értéktől függetlenül (api/src/services/composeValidator.ts), tehát a
+    # deploy bukna rajta. A folyamat továbbra is jogosulatlan felhasználóként
+    # fut — lásd a Dockerfile `USER nextjs` sorát.
     tmpfs:
       - /tmp
 
 volumes:
-  blackcar_data:
+  blackcar60_data:
 
 networks:
-  client_blackcar_net:
+  client_blackcar60_net:
     external: true

@@ -151,7 +151,7 @@ Helyi próbához Traefik nélkül:
 docker compose -f docker-compose.local.yml up --build
 ```
 
-**A `blackcar_data` kötet nélkül minden deploynál elvész a beállítás és az
+**A `blackcar60_data` kötet nélkül minden deploynál elvész a beállítás és az
 összes beérkezett foglalás.**
 
 ---

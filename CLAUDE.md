@@ -39,6 +39,41 @@ szerint épült.
     némán eldobja a méretet.
 12. **`npm run verify` a kapu.** Típus + lint + formázás + teszt + build.
 
+## A telepítés névkonvenciója
+
+A tárhelyplatform (`F:/Klivo/webhosting/docker-web-1`) a `docker-compose.yml`
+minden nevét az **ügyfél azonosítójából** számolja. Az azonosító a platform
+könyvtárszerkezetéből jön — `/app/clients/{ügyfél}/sites/{oldal}/` —, ennél a
+projektnél **`blackcar60`**, a domain alapján. Nem „blackcar".
+
+| Mi                | Alak                    | Itt                      | Forrás a platformban |
+| ----------------- | ----------------------- | ------------------------ | -------------------- |
+| hálózat           | `client_{ügyfél}_net`   | `client_blackcar60_net`  | `services/docker.ts` |
+| konténernév       | `hosting_{ügyfél}_web`  | `hosting_blackcar60_web` | `types.ts` — `containerNameForSite` |
+| szolgáltatásnév   | = konténernév           | `hosting_blackcar60_web` | `services/template.ts` |
+
+A kettő közül **csak a hálózatot ellenőrzi a validátor** — rossz néven a deploy
+azonnal elbukik, érthető hibaüzenettel. A konténernév viszont némán romlik el:
+a build lefut, a konténer elindul, a Traefik pedig egy nem létező névre
+irányít, és a látogató 502-t kap. Ezért mind a hármat egyszerre kell írni.
+
+A compose fájl a platform saját validátorával ellenőrizhető:
+
+```bash
+cd F:/Klivo/webhosting/docker-web-1/api && node_modules/.bin/tsx <(cat <<'EOF'
+import { validateComposeFile } from 'F:/Klivo/webhosting/docker-web-1/api/src/services/composeValidator';
+const r = validateComposeFile('F:/Klivo/! PROJEKTEK/BlackCar/docker-compose.yml', {
+  allowedNetworks: ['client_blackcar60_net'],
+});
+console.log(r.valid ? 'ELFOGADVA' : 'ELUTASITVA:\n' + r.errors.join('\n'));
+EOF
+)
+```
+
+**A panelben a `container_port` legyen 3000.** Az alapértelmezés 80, és a
+Traefik abból építi a cél URL-t — rossz értéken minden más stimmel, a látogató
+mégis 502-t kap.
+
 ## Csapdák, amikbe már beleszaladtunk
 
 - **A webpack nem tud buildelni ebből a mappából.** A `! PROJEKTEK` útvonal
